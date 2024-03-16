@@ -1,7 +1,7 @@
 <?php
 
 try {
-    $dsn = "pgsql:host=mohit-kumar-eet222095-products-server.postgres.database.azure.com port=5432 dbname=mohit-kumar-eet222095-products-database sslmode=require user=pqlsbayksr password=4JZ3LCBD3K01B227$";
+    $dsn = "pgsql:host=mohit-kumar-eet222095-products-server.postgres.database.azure.com port=5432 dbname=mohit-kumar-eet222095-products-database sslmode=require user=pqlsbayksr password=Mohit@1999";
     $conn = new PDO($dsn);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
