@@ -12,7 +12,7 @@ try {
     mysqli_ssl_set($conn,NULL,NULL, "DigiCertGlobalRootCA.crt.pem", NULL, NULL);
     mysqli_real_connect($conn, "mohit-kumar-eet222092-products-crud-server.mysql.database.azure.com", "jircpobeas", "1710BZTOR3P0P4C7$", "mohit-kumar-eet222092-products-crud-database", 3306, MYSQLI_CLIENT_SSL);
 
-    if (!$con) {
+    if (!$conn) {
         die("Connection failed: " . mysqli_connect_error());
     }
 
