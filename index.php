@@ -49,7 +49,6 @@ if (isset($_POST['create'])) {
 // READ operation
 $sql = "SELECT * FROM products";
 $result = $conn->query($sql);
-echo $result;
 
 // UPDATE operation
 if (isset($_POST['update'])) {
