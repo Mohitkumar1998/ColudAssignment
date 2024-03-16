@@ -97,7 +97,8 @@ function deleteProduct($id, $conn) {
 </head>
 <body>
     <div class="container">
-        <h2 class="mt-5">Create Product</h2>
+        <h2 class="mt-5">Product CRUD Application</h2>
+        <h4 class="mt-3">Created By: Mohit Kumar (EET222092)</h4>
         <form class="product-container" method="post" action="index.php">
             <div class="form-group">
                 <label for="name">Product Name:</label>
