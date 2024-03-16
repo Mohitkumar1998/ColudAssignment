@@ -124,14 +124,14 @@ function deleteProduct($id, $conn) {
         if (mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<div class='product-container'>";
-                echo "<p>ID: " . $row['id'] . " - Name: " . $row['name'] . " - Amount: " . $row['amount'] . " - Description: " . $row['description'] . "</p>";
+                echo "<p> Name: " . $row['name'] . " - Amount: " . $row['amount'] . " - Description: " . $row['description'] . "</p>";
                 echo "<button class='btn btn-danger m-2'><a href='?delete_id=" . $row['id'] . "'>Delete</a></button>";
                 echo "<button class='btn btn-primary m-2' id='updateBtn" . $row['id'] . "'>Update</button>";
                 echo "<form method='post' action='index.php' class='update-form' id='updateForm" . $row['id'] . "' style='display:none;'>";
                 echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
-                echo "<input type='text' name='name' value='" . $row['name'] . "' class='form-control'>";
-                echo "<input type='text' name='amount' value='" . $row['amount'] . "' class='form-control'>";
-                echo "<textarea name='description' class='form-control'>" . $row['description'] . "</textarea>";
+                echo "<input class='m-1' type='text' name='name' value='" . $row['name'] . "' class='form-control'>";
+                echo "<input class='m-1' type='text' name='amount' value='" . $row['amount'] . "' class='form-control'>";
+                echo "<textarea class='m-1' name='description' class='form-control'>" . $row['description'] . "</textarea>";
                 echo "<button type='submit' name='update' class='btn btn-success mt-2'>Update</button>";
                 echo "</form>";
                 echo "</div>";
