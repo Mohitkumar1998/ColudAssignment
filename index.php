@@ -37,6 +37,8 @@ if (isset($_POST['create'])) {
     if (!empty($name) && !empty($amount) && !empty($description)) {
         if (insertProduct($name, $amount, $description, $conn)) {
             echo "<script>alert('Product Inserted');</script>";
+            header("Location: /");
+            exit;
         } else {
             echo "<script>alert('Failed to insert product');</script>";
         }
@@ -54,6 +56,8 @@ if (isset($_POST['update'])) {
     if (!empty($id) && !empty($name) && !empty($amount) && !empty($description)) {
         if (updateProduct($id, $name, $amount, $description, $conn)) {
             echo "<script>alert('Product Updated');</script>";
+            header("Location: /");
+            exit;
         } else {
             echo "<script>alert('Failed to update product');</script>";
         }
@@ -66,6 +70,8 @@ if (isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
     if (deleteProduct($id, $conn)) {
         echo "<script>alert('Product Deleted');</script>";
+        header("Location: /");
+        exit;
     } else {
         echo "<script>alert('Failed to delete product');</script>";
     }
@@ -74,25 +80,19 @@ if (isset($_GET['delete_id'])) {
 // Function to insert product
 function insertProduct($name, $amount, $description, $conn) {
     $sql = "INSERT INTO products (name, amount, description) VALUES ('$name', '$amount', '$description')";
-    mysqli_query($conn, $sql);
-    header("Location: /");
-    exit;
+    return mysqli_query($conn, $sql);
 }
 
 // Function to update product
 function updateProduct($id, $name, $amount, $description, $conn) {
     $sql = "UPDATE products SET name='$name', amount='$amount', description='$description' WHERE id='$id'";
-    mysqli_query($conn, $sql);
-    header("Location: /");
-    exit;
+    return mysqli_query($conn, $sql);
 }
 
 // Function to delete product
 function deleteProduct($id, $conn) {
     $sql = "DELETE FROM products WHERE id='$id'";
-    mysqli_query($conn, $sql);
-    header("Location: /");
-    exit;
+    return mysqli_query($conn, $sql);
 }
 
 ?>
@@ -140,8 +140,8 @@ function deleteProduct($id, $conn) {
             while ($row = mysqli_fetch_assoc($result)) {
                 echo "<div class='product-container'>";
                 echo "<p>ID: " . $row['id'] . " - Name: " . $row['name'] . " - Amount: " . $row['amount'] . " - Description: " . $row['description'] . "</p>";
-                echo "<button class='btn btn-danger'><a href='?delete_id=" . $row['id'] . "'>Delete</a></button>";
-                echo "<button class='btn btn-primary mt-2' id='updateBtn" . $row['id'] . "'>Update</button>";
+                echo "<button class='btn btn-danger m-2'><a href='?delete_id=" . $row['id'] . "'>Delete</a></button>";
+                echo "<button class='btn btn-primary m-2' id='updateBtn" . $row['id'] . "'>Update</button>";
                 echo "<form method='post' action='index.php' class='update-form' id='updateForm" . $row['id'] . "' style='display:none;'>";
                 echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
                 echo "<input type='text' name='name' value='" . $row['name'] . "' class='form-control'>";
