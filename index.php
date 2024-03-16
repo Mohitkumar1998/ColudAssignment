@@ -56,8 +56,6 @@ if (isset($_POST['update'])) {
     if (!empty($id) && !empty($name) && !empty($amount) && !empty($description)) {
         if (updateProduct($id, $name, $amount, $description, $conn)) {
             echo "<script>alert('Product Updated');</script>";
-            header("Location: /");
-            exit;
         } else {
             echo "<script>alert('Failed to update product');</script>";
         }
