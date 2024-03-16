@@ -1,12 +1,12 @@
 <?php
 
-try {
-    $dsn = "pgsql:host=mohit-kumar-eet222095-products-server.postgres.database.azure.com port=5432 dbname=mohit-kumar-eet222095-products-database sslmode=require user=pqlsbayksr password=Mohit@1999";
-    $conn = new PDO($dsn);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Connection failed: " . $e->getMessage());
-}
+//try {
+//    $dsn = "pgsql:host=mohit-kumar-eet222095-products-server.postgres.database.azure.com port=5432 dbname=mohit-kumar-eet222095-products-database sslmode=require user=pqlsbayksr password=Mohit@1999";
+//    $conn = new PDO($dsn);
+//    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//} catch (PDOException $e) {
+//    die("Connection failed: " . $e->getMessage());
+//}
 
 // CREATE operation
 if (isset($_POST['create'])) {
