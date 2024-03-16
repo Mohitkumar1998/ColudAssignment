@@ -36,7 +36,6 @@ if (isset($_POST['create'])) {
 
     if (!empty($name) && !empty($amount) && !empty($description)) {
         if (insertProduct($name, $amount, $description, $conn)) {
-            echo "<script>alert('Product Inserted');</script>";
             header("Location: /");
             exit;
         } else {
@@ -55,7 +54,8 @@ if (isset($_POST['update'])) {
 
     if (!empty($id) && !empty($name) && !empty($amount) && !empty($description)) {
         if (updateProduct($id, $name, $amount, $description, $conn)) {
-            echo "<script>alert('Product Updated');</script>";
+            header("Location: /");
+            exit;
         } else {
             echo "<script>alert('Failed to update product');</script>";
         }
@@ -67,7 +67,6 @@ if (isset($_POST['update'])) {
 if (isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
     if (deleteProduct($id, $conn)) {
-        echo "<script>alert('Product Deleted');</script>";
         header("Location: /");
         exit;
     } else {
@@ -101,6 +100,8 @@ function deleteProduct($id, $conn) {
     <title>Product CRUD</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
     <style>
         /* Additional CSS styles */
         .product-container {
