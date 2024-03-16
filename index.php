@@ -36,7 +36,8 @@ if (isset($_POST['create'])) {
 
     if (!empty($name) && !empty($amount) && !empty($description)) {
         if (insertProduct($name, $amount, $description, $conn)) {
-            echo "<script>alert('Product Inserted');</script>";
+            header("Location: /");
+            exit;
         } else {
             echo "<script>alert('Failed to insert product');</script>";
         }
@@ -53,7 +54,8 @@ if (isset($_POST['update'])) {
 
     if (!empty($id) && !empty($name) && !empty($amount) && !empty($description)) {
         if (updateProduct($id, $name, $amount, $description, $conn)) {
-            echo "<script>alert('Product Updated');</script>";
+            header("Location: /");
+            exit;
         } else {
             echo "<script>alert('Failed to update product');</script>";
         }
@@ -65,7 +67,8 @@ if (isset($_POST['update'])) {
 if (isset($_GET['delete_id'])) {
     $id = $_GET['delete_id'];
     if (deleteProduct($id, $conn)) {
-        echo "<script>alert('Product Deleted');</script>";
+        header("Location: /");
+        exit;
     } else {
         echo "<script>alert('Failed to delete product');</script>";
     }
