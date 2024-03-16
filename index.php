@@ -15,20 +15,6 @@ if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
-// Run the migration SQL file
-$migrationSQL = file_get_contents('migration.sql');
-if (mysqli_multi_query($conn, $migrationSQL)) {
-    do {
-        // Consume all results
-        if ($result = mysqli_store_result($conn)) {
-            mysqli_free_result($result);
-        }
-    } while (mysqli_next_result($conn));
-} else {
-    echo "Error executing migration SQL: " . mysqli_error($conn);
-}
-
-
 if (isset($_POST['create'])) {
     $name = $_POST['name'];
     $amount = $_POST['amount'];
