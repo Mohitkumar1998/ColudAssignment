@@ -1,0 +1,7 @@
+{
+    "name": "mohit-kumar-eet222095-products/mohit-kumar-eet222092-products-crud",
+    "description": "Products CRUD Application",
+    "require": {
+        "php": "^8.2"
+    }
+}
