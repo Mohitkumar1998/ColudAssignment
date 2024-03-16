@@ -29,119 +29,114 @@ if (mysqli_multi_query($conn, $migrationSQL)) {
 }
 
 
-// CREATE operation
 if (isset($_POST['create'])) {
     $name = $_POST['name'];
     $amount = $_POST['amount'];
     $description = $_POST['description'];
-    $sql = "INSERT INTO products (name, amount, description) VALUES (:name, :amount, :description)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':description', $description);
-    if ($stmt->execute()) {
-        echo "New record created successfully";
+
+    if (!empty($name) && !empty($amount) && !empty($description)) {
+        if (insertProduct($name, $amount, $description, $conn)) {
+            echo "<script>alert('Product Inserted');</script>";
+        } else {
+            echo "<script>alert('Failed to insert product');</script>";
+        }
     } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "<script>alert('Please fill all fields');</script>";
     }
 }
 
-// READ operation
-$sql = "SELECT * FROM products";
-$result = $conn->query($sql);
-
-// UPDATE operation
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $name = $_POST['name'];
     $amount = $_POST['amount'];
     $description = $_POST['description'];
-    $sql = "UPDATE products SET name=:name, amount=:amount, description=:description WHERE id=:id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->bindParam(':name', $name);
-    $stmt->bindParam(':amount', $amount);
-    $stmt->bindParam(':description', $description);
-    if ($stmt->execute()) {
-        echo "Record updated successfully";
+
+    if (!empty($id) && !empty($name) && !empty($amount) && !empty($description)) {
+        if (updateProduct($id, $name, $amount, $description, $conn)) {
+            echo "<script>alert('Product Updated');</script>";
+        } else {
+            echo "<script>alert('Failed to update product');</script>";
+        }
     } else {
-        echo "Error updating record: " . $conn->error;
+        echo "<script>alert('Please fill all fields');</script>";
     }
 }
 
-// DELETE operation
-if (isset($_POST['delete'])) {
-    $id = $_POST['id'];
-    $sql = "DELETE FROM products WHERE id=:id";
-    $stmt = $conn->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    if ($stmt->execute()) {
-        echo "Record deleted successfully";
+if (isset($_GET['delete_id'])) {
+    $id = $_GET['delete_id'];
+    if (deleteProduct($id, $conn)) {
+        echo "<script>alert('Product Deleted');</script>";
     } else {
-        echo "Error deleting record: " . $conn->error;
+        echo "<script>alert('Failed to delete product');</script>";
     }
 }
+
+// Function to insert product
+function insertProduct($name, $amount, $description, $conn) {
+    $sql = "INSERT INTO products (name, amount, description) VALUES ('$name', '$amount', '$description')";
+    return mysqli_query($conn, $sql);
+}
+
+// Function to update product
+function updateProduct($id, $name, $amount, $description, $conn) {
+    $sql = "UPDATE products SET name='$name', amount='$amount', description='$description' WHERE id='$id'";
+    return mysqli_query($conn, $sql);
+}
+
+// Function to delete product
+function deleteProduct($id, $conn) {
+    $sql = "DELETE FROM products WHERE id='$id'";
+    return mysqli_query($conn, $sql);
+}
+
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>CRUD Operations</title>
+    <title>Product CRUD</title>
 </head>
 <body>
+    <h2>Create Product</h2>
+    <form method="post" action="index.php">
+        <label for="name">Product Name:</label><br>
+        <input type="text" id="name" name="name" required><br>
+        <label for="amount">Amount:</label><br>
+        <input type="text" id="amount" name="amount" required><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description"></textarea><br><br>
+        <input type="submit" name="create" value="Create">
+    </form>
 
-<h2>Create Product</h2>
-<form method="post" action="">
-    <label for="name">Product Name:</label><br>
-    <input type="text" id="name" name="name" required><br>
-    <label for="amount">Amount:</label><br>
-    <input type="text" id="amount" name="amount" required><br>
-    <label for="description">Description:</label><br>
-    <textarea id="description" name="description"></textarea><br><br>
-    <input type="submit" name="create" value="Create">
-</form>
+    <hr>
 
-<hr>
-
-<h2>Products</h2>
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Amount</th>
-        <th>Description</th>
-        <th>Action</th>
-    </tr>
+    <h2>Products</h2>
     <?php
-    if ($result->rowCount() > 0) {
-        while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-            echo "<tr>";
-            echo "<td>" . $row['id'] . "</td>";
-            echo "<td>" . $row['name'] . "</td>";
-            echo "<td>" . $row['amount'] . "</td>";
-            echo "<td>" . $row['description'] . "</td>";
-            echo "<td>";
-            echo "<form method='post' action=''>";
+    $sql = "SELECT * FROM products";
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<p>ID: " . $row['id'] . " - Name: " . $row['name'] . " - Amount: " . $row['amount'] . " - Description: " . $row['description'] . "</p>";
+            echo "<button><a href='?delete_id=" . $row['id'] . "'>Delete</a></button>";
+            echo "<form method='post' action='index.php'>";
             echo "<input type='hidden' name='id' value='" . $row['id'] . "'>";
             echo "<input type='text' name='name' value='" . $row['name'] . "'>";
             echo "<input type='text' name='amount' value='" . $row['amount'] . "'>";
             echo "<textarea name='description'>" . $row['description'] . "</textarea>";
             echo "<input type='submit' name='update' value='Update'>";
-            echo "<input type='submit' name='delete' value='Delete'>";
             echo "</form>";
-            echo "</td>";
-            echo "</tr>";
+            echo "<hr>";
         }
     } else {
-        echo "<tr><td colspan='5'>No products found</td></tr>";
+        echo "<p>No products found</p>";
     }
     ?>
-</table>
 
 </body>
 </html>
 
 <?php
-// Close connection
-$conn = null;
+mysqli_close($conn);
 ?>
+
