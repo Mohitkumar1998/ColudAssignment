@@ -1,6 +1,3 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-
 name: Build and deploy PHP app to Azure Web App - mohit-kumar-eet222092-products-crud
 
 on:
@@ -14,28 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
 
-      - name: Check if composer.json exists
+      - name: Check if index.php exists
         id: check_files
-        uses: andstor/file-existence-action@v1
-        with:
-          files: 'composer.json'
+        run: |
+          if [ -f "index.php" ]; then
+            echo "::set-output name=files_exists::true"
+          else
+            echo "::set-output name=files_exists::false"
+          fi
 
-      - name: Run composer install if composer.json exists
+      - name: Install dependencies with Composer
         if: steps.check_files.outputs.files_exists == 'true'
-        run: composer validate --no-check-publish && composer install --prefer-dist --no-progress
+        run: |
+          composer validate --no-check-publish
+          composer install --prefer-dist --no-progress
 
       - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+        run: zip -r release.zip .
 
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: php-app
           path: release.zip
@@ -49,18 +51,18 @@ jobs:
     
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: php-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip
-      
+        run: unzip -o release.zip
+
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
-        id: deploy-to-webapp
         with:
           app-name: 'mohit-kumar-eet222092-products-crud'
           slot-name: 'Production'
           package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_41D23075ADAA4EBF9792DBB0B1B5071F }}
+
